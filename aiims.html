@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body onload="loadNextSeqToForm()">
+    <form>
+        <input id="serial" class="serial-no" type="text" name="fname" placeholder="0" maxlength="3" size="3">
+    </form>>
+    
+</body>
+<script>
+    
+    function getNextSeq() {
+       var decodedCookie = decodeURIComponent(document.cookie);
+       var ca = decodedCookie.split(';');
+       for(var i = 0; i <ca.length; i++) {
+           var c = ca[i];
+           while (c.charAt(0) == ' ') {
+               c = c.substring(1);//Trim the empty space if exists
+           }
+           if (c.indexOf("next") == 0) {
+            var fragments = c.split("=");
+            if(fragments.length == 2 && !isNaN(fragments[1])) {
+                return parseInt(fragments[1]) + 1;
+            }
+           }
+       }
+       return "1";//default
+    } 
+    function loadNextSeqToForm() {
+       var nextValue = getNextSeq();
+       document.cookie = "next=" + nextValue + ";";
+       document.getElementById("serial").value = formatToSixCharacters(nextValue);
+    } 
+     function formatToSixCharacters(num) {
+           var numStr = num + "";
+           if(numStr.length < 3) {
+               var zeros = 3 - numStr.length;
+               for(var i = 1; i <= zeros; i++) {
+                   numStr = "0" + numStr;
+               }
+            }
+            return numStr;
+        }
+        </script>
+        </html>
